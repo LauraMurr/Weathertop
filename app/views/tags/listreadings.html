@@ -1,0 +1,23 @@
+
+<table>
+  <thead>
+  <tr>
+    <th>Weather Code</th>
+    <th>Temperature </th>
+    <th>Wind Speed </th>
+    <th>Pressure</th>
+  </tr>
+  </thead>
+  <tbody>
+  #{list items:_station.readings, as:'reading'}
+  <tr>
+    <td>${reading.code}</td>
+    <td>${reading.temp}</td>
+    <td>${reading.wind}</td>
+    <td>${reading.pressure}</td>
+  </tr>
+  #{/list}
+  </tbody>
+</table>
+
+

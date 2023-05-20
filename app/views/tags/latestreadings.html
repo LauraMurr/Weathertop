@@ -13,7 +13,9 @@
   <tr>
     <td>${reading.code}</td>
     <td>${reading.temp}</td>
-    <td>${reading.wind}</td>
+    <td>${reading.wind}
+      <br>
+      ${reading.getWindDirection()}</td>
     <td>${reading.pressure}</td>
   </tr>
   #{/list}

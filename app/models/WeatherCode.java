@@ -1,6 +1,6 @@
 package models;
 
-
+import play.Logger;
 //A class to take the code parameter and set the description based on what code is entered.
 
 public class WeatherCode {
@@ -21,6 +21,7 @@ public class WeatherCode {
         return this.description;
     }
     private String getDescription(int code){
+        Logger.info("WeatherCode getDescription called with code: " + code);
         switch(code){
             case 100:
                 return "Clear";

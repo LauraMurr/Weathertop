@@ -1,0 +1,153 @@
+#{extends 'main.html' /}
+
+#{menu id:"stations"/}
+
+
+#{list items:stations, as:'station'}
+
+
+<div class="columns is-desktop">
+  <div class="column is-flex">
+    <div class="column has-background-primary has-text-white">
+      <div class="column-content">
+        <h2 class="title is-4 has-text-centered">LOCATION</h2>
+        <span class="icon is-large"></span>
+      <span class="icon"><i class="fas fa-street-view fa-2x"></i></span>
+      <div class="content is-flex-direction-column">
+        <br>
+        <br>
+        <p class="is-size-5">
+          ${station.title} <br>
+        </p>
+        <p class="is-size-8">
+          Lat: ${station.latitude} <br>
+          Long: ${station.longitude}
+        </p>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="column is-flex">
+    <div class="column has-background-primary has-text-white">
+      <h2 class="title is-4 has-text-centered">WEATHER</h2>
+      <span class="icon is-large"></span>
+      <span class="icon"><i class="fas fa-cloud-sun fa-2x"></i></span><br>
+      #{if station.latestReading != null}
+      <div class="content is-flex-direction-column">
+        <br>
+        <br>
+        <p class="is-size-5">
+          ${new models.WeatherCode(station.latestReading.code).getDescription()}
+        </p>
+      </div>
+      #{else}
+      <div class="content is-flex-direction-column">
+        <p class="is-size-5">No weather data available</p>
+      </div>
+      #{/else}
+      #{/if}
+    </div>
+  </div>
+  <div class="column is-flex">
+    <div class="column has-background-primary has-text-white">
+      <h2 class="title is-4 has-text-centered">TEMPERATURE</h2>
+      <span class="icon is-large"></span>
+      <span class="icon"><i class="fas fa-thermometer-three-quarters fa-2x"></i></span>
+      #{if station.latestReading != null}
+      <div class="content is-flex-direction-column">
+        <br>
+        <br>
+        <p class="is-size-5">${station.latestReading.temp} C / ${models.TempConversion.celsiusToFahrenheit(station.latestReading.temp)} F</p>
+      </div>
+      #{else}
+      <div class="content is-flex-direction-column">
+        <p class="is-size-5">No weather data available</p>
+      </div>
+      #{/else}
+      #{/if}
+    </div>
+  </div>
+  <div class="column is-flex">
+    <div class="column has-background-primary has-text-white">
+      <h2 class="title is-4 has-text-centered">WIND</h2>
+      <span class="icon is-large"></span>
+      <span class="icon"><i class="fas fa-wind fa-2x"></i></span>
+      #{if station.latestReading != null}
+      <div class="content is-flex-direction-column">
+        <br>
+        <br>
+        <p class="is-size-8">${station.latestReading.wind} km/h
+          <br>
+          ${new models.WindSpeed(station.latestReading.wind).convertToBeaufortScale(station.latestReading.wind)}
+          <br>
+          Direction: ${station.degreesToDirection(station.latestReading.getWindDirection())}
+          <br>
+          Feels like:
+          ${Math.round(station.latestReading.getWindChill())} &deg;C
+        </p>
+      </div>
+      #{else}
+      <div class="content is-flex-direction-column">
+        <p class="is-size-5">No weather data available</p>
+      </div>
+      #{/else}
+      #{/if}
+    </div>
+  </div>
+  <div class="column is-flex">
+    <div class="column has-background-primary has-text-white">
+      <h2 class="title is-4 has-text-centered">PRESSURE</h2>
+      <span class="icon is-large"></span>
+      <span class="icon"><i class="fas fa-gem fa-2x"></i>
+        </span>
+      #{if station.latestReading != null}
+      <div class="content is-flex-direction-column">
+        <br>
+        <br>
+        <p class="is-size-5">${station.latestReading.pressure} hpa</p>
+      </div>
+      #{else}
+      <div class="content is-flex-direction-column">
+        <p class="is-size-5">No weather data available</p>
+      </div>
+      #{/else}
+      #{/if}
+    </div>
+  </div>
+</div>
+
+
+  <table class="table is-fullwidth">
+    <thead>
+    <tr>
+      <th>Weather</th>
+      <th>Temperature</th>
+      <th>Wind</th>
+      <th>Wind Direction</th>
+      <th>Pressure</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    #{list items:station.readings, as:'reading'}
+    <tr>
+      <td>${new models.WeatherCode(reading.code).getDescription(reading.code)}</td>
+      <td>${reading.temp} C</td>
+      <td>${reading.wind} Km/h
+        <br>
+        ${new models.WindSpeed(reading.wind).convertToBeaufortScale(reading.wind)}
+        <br>
+      </td>
+      <td>${station.degreesToDirection(reading.windDirection)}</td>
+      <td>${reading.pressure} hpa</td>
+      <td>
+        <a class="button is-danger">Delete Reading</a>
+      </td>
+    </tr>
+    #{/list}
+    </tbody>
+  </table>
+  #{addreading station:station /}
+#{/list}
+
+
